@@ -181,13 +181,13 @@ export default function PaymentsPage() {
                           <TableCell className="font-mono text-xs">{payment.id.substring(0, 8)}...</TableCell>
                           <TableCell>{payment.description}</TableCell>
                           <TableCell className="font-semibold">
-                            {payment.amount.currency} {payment.amount.amount.toFixed(2)}
+                            {payment.amount.currency} {Number(payment.amount.amount).toFixed(2)}
                           </TableCell>
                           <TableCell>{methodLabels[payment.method]}</TableCell>
                           <TableCell>
                             <Badge className={statusColors[payment.status]}>{statusLabels[payment.status]}</Badge>
                           </TableCell>
-                          <TableCell className="text-sm text-muted-foreground">
+                          <TableCell className="text-sm text-muted-foreground" suppressHydrationWarning>
                             {new Date(payment.createdAt).toLocaleDateString("pt-BR")}
                           </TableCell>
                         </TableRow>

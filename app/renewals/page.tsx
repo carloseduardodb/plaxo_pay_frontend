@@ -146,10 +146,10 @@ export default function RenewalsPage() {
                               {subscription.customerId.substring(0, 8)}...
                             </TableCell>
                             <TableCell className="font-semibold">
-                              {subscription.amount.currency} {subscription.amount.amount.toFixed(2)}
+                              {subscription.amount.currency} {Number(subscription.amount.amount).toFixed(2)}
                             </TableCell>
                             <TableCell>{billingCycleLabels[subscription.billingCycle]}</TableCell>
-                            <TableCell>
+                            <TableCell suppressHydrationWarning>
                               <div className="flex flex-col gap-1">
                                 <span className="text-sm">
                                   {new Date(subscription.nextBillingDate).toLocaleDateString("pt-BR")}

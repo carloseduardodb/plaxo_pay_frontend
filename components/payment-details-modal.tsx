@@ -54,7 +54,7 @@ export function PaymentDetailsModal({ payment, open, onOpenChange }: PaymentDeta
             <div>
               <p className="text-sm text-muted-foreground">Valor</p>
               <p className="text-lg font-semibold">
-                {payment.amount.currency} {payment.amount.amount.toFixed(2)}
+                {payment.amount.currency} {Number(payment.amount.amount).toFixed(2)}
               </p>
             </div>
             <div>

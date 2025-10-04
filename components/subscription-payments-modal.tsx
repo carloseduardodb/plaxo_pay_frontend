@@ -101,7 +101,7 @@ export function SubscriptionPaymentsModal({ subscription, open, onOpenChange }: 
                       <TableCell className="font-mono text-xs">{payment.id.substring(0, 8)}...</TableCell>
                       <TableCell>{payment.description}</TableCell>
                       <TableCell className="font-semibold">
-                        {payment.amount.currency} {payment.amount.amount.toFixed(2)}
+                        {payment.amount.currency} {Number(payment.amount.amount).toFixed(2)}
                       </TableCell>
                       <TableCell>{methodLabels[payment.method]}</TableCell>
                       <TableCell>

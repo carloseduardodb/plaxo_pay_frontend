@@ -211,7 +211,7 @@ export default function SubscriptionsPage() {
                           <TableCell className="font-mono text-xs">{subscription.id.substring(0, 8)}...</TableCell>
                           <TableCell className="font-semibold">{subscription.planName}</TableCell>
                           <TableCell className="font-semibold">
-                            {subscription.amount.currency} {subscription.amount.amount.toFixed(2)}
+                            {subscription.amount.currency} {Number(subscription.amount.amount).toFixed(2)}
                           </TableCell>
                           <TableCell>{billingCycleLabels[subscription.billingCycle]}</TableCell>
                           <TableCell>
@@ -219,7 +219,7 @@ export default function SubscriptionsPage() {
                               {statusLabels[subscription.status]}
                             </Badge>
                           </TableCell>
-                          <TableCell className="text-sm text-muted-foreground">
+                          <TableCell className="text-sm text-muted-foreground" suppressHydrationWarning>
                             {new Date(subscription.nextBillingDate).toLocaleDateString("pt-BR")}
                           </TableCell>
                           <TableCell>
