@@ -2,10 +2,8 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import useSWR from "swr"
-import { useAuth } from "@/components/auth-provider"
-import { Sidebar } from "@/components/sidebar"
 import { apiClient } from "@/lib/api-client"
 import type { Application, CreateApplicationRequest } from "@/lib/types"
 import { Button } from "@/components/ui/button"
@@ -23,11 +21,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Switch } from "@/components/ui/switch"
-import { useRouter } from "next/navigation"
 
 export default function ApplicationsPage() {
-  const { isAuthenticated, isLoading: authLoading } = useAuth()
-  const router = useRouter()
   const [searchTerm, setSearchTerm] = useState("")
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [formData, setFormData] = useState<CreateApplicationRequest>({
@@ -36,12 +31,6 @@ export default function ApplicationsPage() {
     isActive: true,
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
-
-  useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
-      router.push("/")
-    }
-  }, [isAuthenticated, authLoading, router])
 
   const {
     data: applications,
@@ -70,39 +59,21 @@ export default function ApplicationsPage() {
     }
   }
 
-  if (authLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-      </div>
-    )
-  }
-
-  if (!isAuthenticated) {
-    return null
-  }
-
   if (error) {
     return (
-      <div className="flex h-screen bg-background">
-        <Sidebar />
-        <div className="flex-1 flex items-center justify-center">
-          <Card className="w-96">
-            <CardHeader>
-              <CardTitle className="text-destructive">Erro</CardTitle>
-              <CardDescription>Falha ao carregar aplicações</CardDescription>
-            </CardHeader>
-          </Card>
-        </div>
+      <div className="flex h-full items-center justify-center">
+        <Card className="w-96">
+          <CardHeader>
+            <CardTitle className="text-destructive">Erro</CardTitle>
+            <CardDescription>Falha ao carregar aplicações</CardDescription>
+          </CardHeader>
+        </Card>
       </div>
     )
   }
 
   return (
-    <div className="flex h-screen bg-background">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto">
-        <div className="container mx-auto p-6 space-y-6">
+    <div className="container mx-auto p-6 space-y-6">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-foreground">Aplicações</h1>
@@ -227,8 +198,6 @@ export default function ApplicationsPage() {
               </CardContent>
             </Card>
           )}
-        </div>
-      </main>
     </div>
   )
 }

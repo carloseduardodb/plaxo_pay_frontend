@@ -1,8 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useAuth } from "@/components/auth-provider"
-import { Sidebar } from "@/components/sidebar"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -14,7 +12,7 @@ import { apiClient } from "@/lib/api-client"
 import type { Subscription } from "@/lib/types"
 import { Search, Loader2, Ban, Pause, FileText } from "lucide-react"
 import { SubscriptionPaymentsModal } from "@/components/subscription-payments-modal"
-import { useRouter } from "next/navigation"
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -45,8 +43,6 @@ const billingCycleLabels = {
 }
 
 export default function SubscriptionsPage() {
-  const { isAuthenticated, isLoading: authLoading } = useAuth()
-  const router = useRouter()
   const [applicationId, setApplicationId] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
@@ -58,11 +54,7 @@ export default function SubscriptionsPage() {
   const [actionType, setActionType] = useState<"cancel" | "suspend" | null>(null)
   const [actionLoading, setActionLoading] = useState(false)
 
-  useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
-      router.push("/")
-    }
-  }, [isAuthenticated, authLoading, router])
+
 
   const handleSearch = async () => {
     if (!applicationId.trim()) {
@@ -116,23 +108,8 @@ export default function SubscriptionsPage() {
     }
   }
 
-  if (authLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-      </div>
-    )
-  }
-
-  if (!isAuthenticated) {
-    return null
-  }
-
   return (
-    <div className="flex h-screen bg-background">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto">
-        <div className="container mx-auto p-6 space-y-6">
+    <div className="container mx-auto p-6 space-y-6">
           <div>
             <h1 className="text-3xl font-bold text-foreground">Assinaturas</h1>
             <p className="text-muted-foreground">Busque e gerencie assinaturas por aplicação</p>
@@ -262,9 +239,6 @@ export default function SubscriptionsPage() {
               </CardContent>
             </Card>
           )}
-        </div>
-      </main>
-
       <SubscriptionPaymentsModal
         subscription={selectedSubscription}
         open={paymentsModalOpen}

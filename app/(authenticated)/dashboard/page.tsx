@@ -1,13 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useAuth } from "@/components/auth-provider"
-import { Sidebar } from "@/components/sidebar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { apiClient } from "@/lib/api-client"
 import { CreditCard, FileText, Calendar, Package, Loader2, TrendingUp } from "lucide-react"
-import { useRouter } from "next/navigation"
 import Link from "next/link"
 
 interface DashboardStats {
@@ -20,22 +17,12 @@ interface DashboardStats {
 }
 
 export default function DashboardPage() {
-  const { isAuthenticated, isLoading: authLoading } = useAuth()
-  const router = useRouter()
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
-      router.push("/")
-    }
-  }, [isAuthenticated, authLoading, router])
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      loadDashboardData()
-    }
-  }, [isAuthenticated])
+    loadDashboardData()
+  }, [])
 
   const loadDashboardData = async () => {
     try {
@@ -60,23 +47,16 @@ export default function DashboardPage() {
     }
   }
 
-  if (authLoading || isLoading) {
+  if (isLoading) {
     return (
-      <div className="flex h-screen items-center justify-center">
+      <div className="flex h-full items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
     )
   }
 
-  if (!isAuthenticated) {
-    return null
-  }
-
   return (
-    <div className="flex h-screen bg-background">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto">
-        <div className="container mx-auto p-6 space-y-6">
+    <div className="container mx-auto p-6 space-y-6">
           <div>
             <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
             <p className="text-muted-foreground">Visão geral do sistema de pagamentos</p>
@@ -211,8 +191,6 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
           </div>
-        </div>
-      </main>
     </div>
   )
 }
