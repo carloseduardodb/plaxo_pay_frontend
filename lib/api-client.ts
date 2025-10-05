@@ -7,29 +7,46 @@ import type {
   CreateApplicationRequest,
 } from "./types";
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000/api";
-
 class ApiClient {
   private client: AxiosInstance;
   private token: string | null = null;
+  private baseURL: string = "http://localhost:3010/api";
 
   constructor() {
     this.client = axios.create({
-      baseURL: API_BASE_URL,
+      baseURL: this.baseURL,
     });
+    
+    this.setupInterceptors();
+    this.loadToken();
+    this.initializeConfig();
+  }
 
-    // Add token to requests if available
+  private setupInterceptors() {
     this.client.interceptors.request.use((config) => {
       if (this.token) {
         config.headers.Authorization = `Bearer ${this.token}`;
       }
       return config;
     });
+  }
 
-    // Load token from localStorage on client side
+  private loadToken() {
     if (typeof window !== "undefined") {
       this.token = localStorage.getItem("plaxo_token");
+    }
+  }
+
+  private async initializeConfig() {
+    if (typeof window !== "undefined") {
+      try {
+        const response = await fetch('/api/config');
+        const config = await response.json();
+        this.baseURL = config.apiBaseUrl;
+        this.client.defaults.baseURL = this.baseURL;
+      } catch (error) {
+        console.warn('Failed to load config, using default API URL');
+      }
     }
   }
 
