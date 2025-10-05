@@ -5,12 +5,12 @@ WORKDIR /app
 # Dependencies
 FROM base AS deps
 COPY package.json pnpm-lock.yaml* ./
-RUN corepack enable pnpm && pnpm install --frozen-lockfile --prod
+RUN corepack enable pnpm && pnpm install --prod
 
 # Builder
 FROM base AS builder
 COPY package.json pnpm-lock.yaml* ./
-RUN corepack enable pnpm && pnpm install --frozen-lockfile
+RUN corepack enable pnpm && pnpm install
 COPY . .
 RUN pnpm build
 
