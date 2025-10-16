@@ -4,9 +4,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Button } from '../components/ui/button'
 import { Badge } from '../components/ui/badge'
 import { useSubscriptions } from '../hooks/use-subscriptions'
-import { useApplications } from '../hooks/use-applications'
+import { useApplications, Application } from '../hooks/use-applications'
 import { formatCurrency, formatDate } from '../lib/utils'
-import { subscriptionApi, paymentApi } from '../lib/api-client'
+import { subscriptionApi, paymentApi, Payment } from '../lib/api-client'
 import { MdSubscriptions, MdApps, MdCancel, MdPause, MdPayment } from 'react-icons/md'
 
 export function Subscriptions() {
@@ -15,7 +15,7 @@ export function Subscriptions() {
   const { subscriptions, isLoading, error, refresh } = useSubscriptions(selectedAppId)
   const [actionLoading, setActionLoading] = useState<string | null>(null)
   const [showPayments, setShowPayments] = useState<string | null>(null)
-  const [subscriptionPayments, setSubscriptionPayments] = useState<any[]>([])
+  const [subscriptionPayments, setSubscriptionPayments] = useState<Payment[]>([])
   const [paymentsLoading, setPaymentsLoading] = useState(false)
 
   const handleViewPayments = async (subscriptionId: string) => {
@@ -141,7 +141,7 @@ export function Subscriptions() {
                 onChange={(e) => setSelectedAppId((e.target as HTMLSelectElement).value)}
               >
                 <option value="">Selecione uma aplicação</option>
-                {applications.map(app => (
+                {applications.map((app: Application) => (
                   <option key={app.id} value={app.id}>{app.name}</option>
                 ))}
               </select>
@@ -251,7 +251,7 @@ export function Subscriptions() {
                       </TableRow>
                       {showPayments === subscription.id && (
                         <TableRow>
-                          <TableCell colSpan={6} class="p-0">
+                          <TableCell class="p-0" colSpan={6}>
                             <div class="bg-plaxo-background border-t border-plaxo-border p-4">
                               <h4 class="text-sm font-medium text-plaxo-text mb-3 flex items-center gap-2">
                                 <span class="text-plaxo-primary"><MdPayment /></span>

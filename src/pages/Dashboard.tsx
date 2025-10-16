@@ -1,13 +1,13 @@
 import { useState } from 'preact/hooks'
 import { Card, CardContent } from '../components/ui/card'
-import { useApplications } from '../hooks/use-applications'
+import { useApplications, Application } from '../hooks/use-applications'
 import { usePayments } from '../hooks/use-payments'
 import { useSubscriptions } from '../hooks/use-subscriptions'
 import { formatCurrency } from '../lib/utils'
 import { MdAttachMoney, MdSubscriptions, MdTrendingUp, MdApps } from 'react-icons/md'
 
 export function Dashboard() {
-  const { applications, isLoading: appsLoading } = useApplications()
+  const { applications } = useApplications()
   const [selectedAppId, setSelectedAppId] = useState<string>('')
   
   const { payments, isLoading: paymentsLoading } = usePayments(selectedAppId)
@@ -51,7 +51,7 @@ export function Dashboard() {
             onChange={(e) => setSelectedAppId((e.target as HTMLSelectElement).value)}
           >
             <option value="">Selecione uma aplicação</option>
-            {applications.map(app => (
+            {applications.map((app: Application) => (
               <option key={app.id} value={app.id}>{app.name}</option>
             ))}
           </select>

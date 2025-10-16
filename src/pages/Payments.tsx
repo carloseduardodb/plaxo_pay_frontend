@@ -1,10 +1,10 @@
 import { useState } from 'preact/hooks'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table'
-import { Button } from '../components/ui/button'
+
 import { Badge } from '../components/ui/badge'
 import { usePayments } from '../hooks/use-payments'
-import { useApplications } from '../hooks/use-applications'
+import { useApplications, Application } from '../hooks/use-applications'
 import { formatCurrency, formatDate } from '../lib/utils'
 import { MdPayment, MdApps } from 'react-icons/md'
 
@@ -78,7 +78,7 @@ export function Payments() {
                 onChange={(e) => setSelectedAppId((e.target as HTMLSelectElement).value)}
               >
                 <option value="">Selecione uma aplicação</option>
-                {applications.map(app => (
+                {applications.map((app: Application) => (
                   <option key={app.id} value={app.id}>{app.name}</option>
                 ))}
               </select>

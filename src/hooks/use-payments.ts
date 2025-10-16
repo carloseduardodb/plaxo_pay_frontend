@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { paymentApi, Payment } from '../lib/api-client'
+import { paymentApi } from '../lib/api-client'
 
 export function usePayments(applicationId?: string) {
   const { data, error, isLoading, mutate } = useSWR(

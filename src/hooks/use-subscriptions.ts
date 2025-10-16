@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { subscriptionApi, Subscription } from '../lib/api-client'
+import { subscriptionApi } from '../lib/api-client'
 
 export function useSubscriptions(applicationId?: string) {
   const { data, error, isLoading, mutate } = useSWR(

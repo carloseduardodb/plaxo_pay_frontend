@@ -2,7 +2,7 @@ import { useState } from 'preact/hooks'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Button } from '../components/ui/button'
 import { Input } from '../components/ui/input'
-import { useApplications } from '../hooks/use-applications'
+import { useApplications, Application } from '../hooks/use-applications'
 import { applicationApi } from '../lib/api-client'
 import { MdAdd, MdApps, MdRocketLaunch, MdContentCopy } from 'react-icons/md'
 
@@ -142,7 +142,7 @@ export function Applications() {
             </Button>
           </div>
         ) : (
-          applications.map((app) => (
+          applications.map((app: Application) => (
             <Card key={app.id} class="bg-plaxo-surface border-plaxo-border shadow-soft hover:shadow-lg transition-shadow">
               <CardContent class="p-6">
                 <div class="flex items-start justify-between mb-4">

@@ -1,5 +1,4 @@
 import { route } from 'preact-router'
-import { useAuth } from '../../contexts/auth-context'
 import { MdDashboard, MdApps, MdPayment, MdSubscriptions } from 'react-icons/md'
 
 interface SidebarProps {
@@ -47,9 +46,11 @@ export function Sidebar({ currentPath }: SidebarProps) {
                   : 'text-plaxo-text hover:bg-plaxo-background hover:text-plaxo-primary'
               }`}
             >
-              <item.icon class={`mr-3 text-lg transition-transform group-hover:scale-110 ${
+              <span class={`mr-3 text-lg transition-transform group-hover:scale-110 ${
                 isActive ? '' : 'group-hover:animate-pulse'
-              }`} />
+              }`}>
+                <item.icon />
+              </span>
               <span class="font-medium">{item.name}</span>
             </button>
           )
