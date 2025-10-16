@@ -1,31 +1,18 @@
-FROM node:18-alpine AS base
-RUN apk add --no-cache libc6-compat
+FROM node:18-alpine AS builder
 WORKDIR /app
 
-# Dependencies
-FROM base AS deps
-COPY package.json pnpm-lock.yaml* ./
-RUN corepack enable pnpm && pnpm install --prod
-
-# Builder
-FROM base AS builder
+# Copy package files
 COPY package.json pnpm-lock.yaml* ./
 RUN corepack enable pnpm && pnpm install
+
+# Copy source and build
 COPY . .
 RUN pnpm build
 
-# Runner - distroless for minimal size
-FROM gcr.io/distroless/nodejs18-debian11 AS runner
-WORKDIR /app
+# Production server
+FROM nginx:alpine AS runner
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf
 
-ENV NODE_ENV=production
-ENV NODE_OPTIONS="--max-old-space-size=512"
-
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-
-EXPOSE 3000
-ENV PORT=3000 HOSTNAME="0.0.0.0"
-
-CMD ["server.js"]
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
