@@ -1,13 +1,13 @@
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Copy package files
-COPY package.json pnpm-lock.yaml* ./
-RUN corepack enable pnpm && pnpm install
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
 # Copy source and build
 COPY . .
-RUN pnpm build
+RUN yarn build
 
 # Production server
 FROM nginx:alpine AS runner
